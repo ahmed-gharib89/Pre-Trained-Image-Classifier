@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # */AIPND-revision/intropyproject-classify-pet-images/get_pet_labels.py
 #                                                                             
-# PROGRAMMER: 
-# DATE CREATED:                                  
+# PROGRAMMER: Ahmed Gharib
+# DATE CREATED: 09/11/2020                                  
 # REVISED DATE: 
 # PURPOSE: Create the function get_pet_labels that creates the pet labels from 
 #          the image's filename. This function inputs: 
@@ -42,4 +42,21 @@ def get_pet_labels(image_dir):
     """
     # Replace None with the results_dic dictionary that you created with this
     # function
-    return None
+
+    # Creates empty dictionary to hold the file path and label
+    results_dict = dict()
+
+    # Get the list of file names in the image folder
+    filenames = listdir(image_dir)
+    
+    # loop through each file and append the file name and label to the dictionary
+    for f in filenames:
+        path = f
+        label = f.lower()
+        label = f.split('_')
+        label = [w for w in label if w.isalpha()]
+        label = [' '.join(label)]
+
+        results_dict[path] = label
+
+    return results_dict
