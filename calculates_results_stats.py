@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # */AIPND-revision/intropyproject-classify-pet-images/calculates_results_stats.py
 #                                                                             
-# PROGRAMMER:
-# DATE CREATED:                                  
+# PROGRAMMER: Ahmed Gharib
+# DATE CREATED: 09/11/2020                                 
 # REVISED DATE: 
 # PURPOSE: Create a function calculates_results_stats that calculates the 
 #          statistics of the results of the programrun using the classifier's model 
@@ -42,7 +42,9 @@
 #       in the return statement with the results_stats_dic dictionary that you create 
 #       with this function
 # 
-def calculates_results_stats(results_dic):
+import pandas as pd
+
+def calculates_results_stats(results_dict):
     """
     Calculates statistics of the results of the program run using classifier's model 
     architecture to classifying pet images. Then puts the results statistics in a 
@@ -70,4 +72,32 @@ def calculates_results_stats(results_dic):
     """        
     # Replace None with the results_stats_dic dictionary that you created with 
     # this function 
-    return None
+    df = pd.DataFrame(results_dict).T.reset_index()
+    df.columns = ['image', 'pet_label', 'classifier_label', 'match_labels', 'pet_is_dog', 'classifier_is_dog']
+
+    n_images = df.shape[0]
+    n_dogs_img = df.pet_is_dog.sum()
+    n_notdogs_img = n_images - n_dogs_img
+    n_match = df.match_labels.sum()
+    n_correct_dogs = df.query('pet_is_dog == 1 & classifier_is_dog == 1').shape[0]
+    n_correct_notdogs = df.query('pet_is_dog == 0 & classifier_is_dog == 0').shape[0]
+    n_correct_breed = df.query('pet_is_dog == 1 & match_labels == 1').shape[0]
+    pct_match = (n_match / n_images) * 100
+    pct_correct_dogs = (n_correct_dogs / n_dogs_img) * 100
+    pct_correct_breed = (n_correct_breed / n_dogs_img) * 100
+    pct_correct_notdogs = (n_correct_notdogs / n_notdogs_img) * 100
+
+    results_stats_dic = dict(n_images = n_images,
+                             n_dogs_img = n_dogs_img,
+                             n_notdogs_img = n_notdogs_img,
+                             n_match = n_match,
+                             n_correct_dogs = n_correct_dogs,
+                             n_correct_notdogs = n_correct_notdogs,
+                             n_correct_breed = n_correct_breed,
+                             pct_match = pct_match,
+                             pct_correct_dogs = pct_correct_dogs,
+                             pct_correct_breed = pct_correct_breed,
+                             pct_correct_notdogs = pct_correct_notdogs)
+
+
+    return results_stats_dic
