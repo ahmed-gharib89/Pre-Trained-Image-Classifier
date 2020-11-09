@@ -67,4 +67,4 @@ def classify_images(images_dir, results_dict, model):
     """
     for key, value in results_dict.items():
         classifier_label = classifier(images_dir + key, model).lower()
-        results_dict[key].extend([classifier_label, value[0] in classifier_label]) 
+        results_dict[key].extend([classifier_label, int(value[0] in classifier_label)])
