@@ -52,9 +52,8 @@ def get_pet_labels(image_dir):
     # loop through each file and append the file name and label to the dictionary
     for f in filenames:
         path = f
-        label = f.lower()
         label = f.split('_')
-        label = [w for w in label if w.isalpha()]
+        label = [w.lower() for w in label if w.isalpha()]
         label = [' '.join(label)]
 
         results_dict[path] = label
